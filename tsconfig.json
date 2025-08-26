@@ -13,5 +13,5 @@
     "forceConsistentCasingInFileNames": true,
     "types": ["node", "react", "react-dom"]
   },
-  "include": ["src/*"]
+  "include": ["src"]
 }
