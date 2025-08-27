@@ -2,7 +2,7 @@ import { ComponentType, SVGProps } from "react";
 import { generalComponentTypes } from "./componentTypes";
 const ProcessUnderline = ({
   value = "",
-  highLightedText = "",
+  selectionData = null,
   indentifier = "",
   icon: Icon,
 }: generalComponentTypes) => {

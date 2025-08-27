@@ -3,7 +3,7 @@ import { generalComponentTypes } from "./componentTypes";
 
 const ProcessItalic = ({
   value = "",
-  highLightedText = "",
+  selectionData = null,
   indentifier = "",
   icon: Icon,
 }: generalComponentTypes) => {

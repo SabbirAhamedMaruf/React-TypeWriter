@@ -1,15 +1,16 @@
 import { FormEvent } from "react";
 import { processElementData } from "../core/hook/typewriterrules";
-import { ElementTypes } from "../core/hook/useRenderElements";
+import {
+  ElementTypes,
+  useRenderElements,
+} from "../core/hook/useRenderElements";
+import { types } from "node:util";
 
 // Helper function for editor process html strucutre into a html object schema from external source.
 export const preprocessor = (value: string) => {
   const schema = value?.split("/>");
   console.log({ schema });
 };
-
-// Helper function for editor output.
-export const postprocessor = () => {};
 
 // Replaced editablediv text content into a paragraph element.
 export const normalizeEditor = (editor: HTMLDivElement) => {

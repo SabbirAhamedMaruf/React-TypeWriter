@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { typewriterPluginsGenerator } from "../utils/typewriterUIManager";
 import {
   normalizeEditor,
@@ -15,16 +15,24 @@ type TypeWriterProps = {
   onChange?: (value: string) => void;
 };
 
+export type selectionDataType = {
+  selection: Selection | null;
+  range: Range | undefined;
+  selectedText: DocumentFragment | undefined;
+};
+
 const Typewriter = ({
   value,
   plugins = ["basic"],
-  onChange,
+  onChange = () => {},
 }: TypeWriterProps) => {
   // general states
   const [currentValue, setCurrentValue] = useState<ElementTypes[]>([
     { elementType: "", id: "", content: "", style: {}, childNodes: [] },
   ]);
-  const [highLightedText, setHighLightedText] = useState("");
+
+  const [currentSelection, setCurrentSelection] =
+    useState<selectionDataType | null>(null);
 
   // getting editor plugins
   const pluginsBtns = useMemo(
@@ -39,8 +47,6 @@ const Typewriter = ({
     }
   }, [value]);
 
-  console.log({ value, highLightedText, plugins });
-
   return (
     <div className="react-typewriter-wrapper">
       <div className="react-typewriter-controllers-and-editor">
@@ -52,7 +58,7 @@ const Typewriter = ({
               indentifier={key}
               icon={icon}
               value={value}
-              highLightedText={highLightedText}
+              selectionData={currentSelection}
               onChange={setCurrentValue}
             />
           ))}
@@ -62,15 +68,22 @@ const Typewriter = ({
           className="react-typewriter-editor"
           contentEditable
           suppressContentEditableWarning
-          onMouseUp={() => setHighLightedText(processSelectionText())}
+          onMouseUp={(e) => {
+            // getting editor selection data.
+            const selection = window.getSelection();
+            const range = selection?.getRangeAt(0);
+            const selectedText = range?.cloneContents();
+            // setting editor selection data for styling
+            setCurrentSelection({ selection, range, selectedText });
+          }}
           onInput={(e) => {
             const currentEditor = e.currentTarget;
             normalizeEditor(currentEditor);
-            processEditorNodeSchema(e);
+            // const data = processEditorNodeSchema(e);
+            const editorInnerHTML = currentEditor.innerHTML;
+            onChange(editorInnerHTML);
           }}
-        >
-          {currentValue?.map((node) => useRenderElements(node))}
-        </div>
+        />
       </div>
     </div>
   );
