@@ -5,5 +5,5 @@ export type generalComponentTypes = {
   selectionData?: selectionDataType | null;
   indentifier: string;
   icon: ComponentType<SVGProps<SVGSVGElement>>;
-  onChange: (value: string) => void;
+  onChange: () => void;
 };

@@ -1,13 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { typewriterPluginsGenerator } from "../utils/typewriterUIManager";
-import {
-  normalizeEditor,
-  preprocessor,
-  processEditorNodeSchema,
-  processSelectionText,
-} from "../utils/typewriterHelper";
+import { normalizeEditor } from "../utils/typewriterHelper";
 import "./style/style.css";
-import { ElementTypes, useRenderElements } from "./hook/useRenderElements";
+import { ElementTypes } from "./hook/useRenderElements";
 
 type TypeWriterProps = {
   value: string;
@@ -26,26 +21,21 @@ const Typewriter = ({
   plugins = ["basic"],
   onChange = () => {},
 }: TypeWriterProps) => {
-  // general states
-  const [currentValue, setCurrentValue] = useState<ElementTypes[]>([
-    { elementType: "", id: "", content: "", style: {}, childNodes: [] },
-  ]);
-
   const [currentSelection, setCurrentSelection] =
     useState<selectionDataType | null>(null);
 
-  // getting editor plugins
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  // Generalized change handler
+  const handleEditorChange = (editor: HTMLDivElement) => {
+    normalizeEditor(editor);
+    onChange(editor.innerHTML);
+  };
+
   const pluginsBtns = useMemo(
     () => typewriterPluginsGenerator(plugins),
     [plugins]
   );
-
-  // Main trigger
-  useEffect(() => {
-    if (typeof value === "string" && value) {
-      const processedEidtorHtmlSchema = preprocessor(value);
-    }
-  }, [value]);
 
   return (
     <div className="react-typewriter-wrapper">
@@ -57,31 +47,29 @@ const Typewriter = ({
               key={key}
               indentifier={key}
               icon={icon}
-              value={value}
               selectionData={currentSelection}
-              onChange={setCurrentValue}
+              onChange={() => {
+                if (editorRef.current) handleEditorChange(editorRef.current);
+              }}
             />
           ))}
         </div>
-        {/* editors */}
+
+        {/* editor */}
         <div
+          ref={editorRef}
           className="react-typewriter-editor"
           contentEditable
           suppressContentEditableWarning
-          onMouseUp={(e) => {
-            // getting editor selection data.
+          onMouseUp={() => {
             const selection = window.getSelection();
             const range = selection?.getRangeAt(0);
             const selectedText = range?.cloneContents();
-            // setting editor selection data for styling
             setCurrentSelection({ selection, range, selectedText });
+            if (editorRef.current) handleEditorChange(editorRef.current);
           }}
-          onInput={(e) => {
-            const currentEditor = e.currentTarget;
-            normalizeEditor(currentEditor);
-            // const data = processEditorNodeSchema(e);
-            const editorInnerHTML = currentEditor.innerHTML;
-            onChange(editorInnerHTML);
+          onInput={() => {
+            if (editorRef.current) handleEditorChange(editorRef.current);
           }}
         />
       </div>

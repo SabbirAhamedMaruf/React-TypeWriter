@@ -6,6 +6,7 @@ const ProcessBold = ({
   selectionData = null,
   indentifier = "",
   icon: Icon,
+  onChange = () => {},
 }: generalComponentTypes) => {
   const handleBoldProcessing = (
     selectionData: selectionDataType | null,
@@ -29,6 +30,7 @@ const ProcessBold = ({
 
     selection.removeAllRanges();
     selection.addRange(range);
+    onChange(); // getting latest innerHTML
   };
 
   return (
