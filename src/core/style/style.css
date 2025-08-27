@@ -57,6 +57,18 @@
   color: #00070b;
 }
 
+/* Controller Design */
+.react-typewriter-bold {
+  color: #374144;
+}
+.react-typewriter-bold:hover {
+  color: #00070b;
+}
+.react-typewriter-bold:active {
+  color: #00070b;
+}
+
+/* Responsive design */
 @media (max-width: 600px) {
   .react-typewriter-controllers {
     gap: 6px;
