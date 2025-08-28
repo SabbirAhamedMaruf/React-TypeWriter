@@ -1,5 +1,5 @@
 import { ComponentType, SVGProps } from "react";
-import { generalComponentTypes } from "./componentTypes";
+import { generalComponentTypes } from "../types/typewriterTypes";
 const ProcessLeftAlign = ({
   value = "",
   selectionData = null,

@@ -1,11 +1,6 @@
 import { ComponentType, SVGProps } from "react";
-import { generalComponentTypes } from "./componentTypes";
-const ProcessLink = ({
-  value = "",
-  selectionData = null,
-  indentifier = "",
-  icon: Icon,
-}: generalComponentTypes) => {
+import { generalComponentTypes } from "../types/typewriterTypes";
+const ProcessLink = ({ value = "", selectionData = null, indentifier = "", icon: Icon }: generalComponentTypes) => {
   return (
     <div className={`react-typewriter-${indentifier}`}>
       <Icon height={"24px"} width={"24px"} />

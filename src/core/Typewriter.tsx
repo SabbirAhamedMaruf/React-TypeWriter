@@ -1,30 +1,14 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { typewriterPluginsGenerator } from "../utils/typewriterUIManager";
-import { normalizeEditor } from "../utils/typewriterHelper";
+import { getEditorSelection, normalizeEditor } from "../utils/typewriterHelper";
+import { selectionDataType, typewriterTypes } from "../types/typewriterTypes";
 import "./style/style.css";
-import { ElementTypes } from "./hook/useRenderElements";
 
-type TypeWriterProps = {
-  value: string;
-  plugins?: string[];
-  onChange?: (value: string) => void;
-};
-
-export type selectionDataType = {
-  selection: Selection | null;
-  range: Range | undefined;
-  selectedText: DocumentFragment | undefined;
-};
-
-const Typewriter = ({
-  value,
-  plugins = ["basic"],
-  onChange = () => {},
-}: TypeWriterProps) => {
-  const [currentSelection, setCurrentSelection] =
-    useState<selectionDataType | null>(null);
-
+const Typewriter = ({ value, plugins = ["basic"], onChange = () => {} }: typewriterTypes) => {
   const editorRef = useRef<HTMLDivElement>(null);
+  const [currentSelection, setCurrentSelection] = useState<selectionDataType | null>(null);
+
+  console.log({ currentSelection });
 
   // Generalized change handler
   const handleEditorChange = (editor: HTMLDivElement) => {
@@ -32,10 +16,8 @@ const Typewriter = ({
     onChange(editor.innerHTML);
   };
 
-  const pluginsBtns = useMemo(
-    () => typewriterPluginsGenerator(plugins),
-    [plugins]
-  );
+  //  Loading plugins
+  const pluginsBtns = useMemo(() => typewriterPluginsGenerator(plugins), [plugins]);
 
   return (
     <div className="react-typewriter-wrapper">
@@ -49,7 +31,8 @@ const Typewriter = ({
               icon={icon}
               selectionData={currentSelection}
               onChange={() => {
-                if (editorRef.current) handleEditorChange(editorRef.current);
+                if (editorRef.current) onChange(editorRef.current.innerHTML);
+                setCurrentSelection(null);
               }}
             />
           ))}
@@ -62,10 +45,7 @@ const Typewriter = ({
           contentEditable
           suppressContentEditableWarning
           onMouseUp={() => {
-            const selection = window.getSelection();
-            const range = selection?.getRangeAt(0);
-            const selectedText = range?.cloneContents();
-            setCurrentSelection({ selection, range, selectedText });
+            setCurrentSelection(getEditorSelection());
             if (editorRef.current) handleEditorChange(editorRef.current);
           }}
           onInput={() => {

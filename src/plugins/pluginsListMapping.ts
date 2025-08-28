@@ -9,12 +9,7 @@ import ProcessRightAlign from "../Components/ProcessRightAlign";
 import ProcessColor from "../Components/ProcessColor";
 import ProcessLink from "../Components/ProcessLink";
 import { LineSpacingLogo } from "../assets/TypewriterIcons";
-
-export type pluginsItemTypes = {
-  key: string;
-  icon: ComponentType<SVGProps<SVGSVGElement>>;
-  element: ComponentType<any>;
-};
+import { pluginsItemTypes } from "../types/typewriterTypes";
 
 export const typeWriterPluginsMapping: Record<string, pluginsItemTypes[]> = {
   basic: [

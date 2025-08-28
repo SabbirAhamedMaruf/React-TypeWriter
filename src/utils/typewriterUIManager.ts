@@ -1,12 +1,7 @@
 import { typrWriterLogger } from "./typewriterLogger";
-import {
-  typeWriterPluginsMapping,
-  pluginsItemTypes,
-} from "../plugins/pluginsListMapping";
+import { typeWriterPluginsMapping, pluginsItemTypes } from "../plugins/pluginsListMapping";
 
-export const typewriterPluginsGenerator = (
-  plguinsList: string[] = ["basic"]
-) => {
+export const typewriterPluginsGenerator = (plguinsList: string[] = ["basic"]) => {
   let currentPlugins: string[] = [];
   // fallback for empty plugins
   if (!plguinsList?.length) {
@@ -18,9 +13,7 @@ export const typewriterPluginsGenerator = (
     currentPlugins = plguinsList;
   }
   // getting all plugins
-  const allPluginsData = Object.entries(typeWriterPluginsMapping).reduce<
-    pluginsItemTypes[]
-  >((acc, [key, value]) => {
+  const allPluginsData = Object.entries(typeWriterPluginsMapping).reduce<pluginsItemTypes[]>((acc, [key, value]) => {
     if (currentPlugins.includes(key) && value?.length > 0) {
       acc.push(...value);
     }
