@@ -1,0 +1,62 @@
+{
+  "name": "react-typewriter",
+  "version": "1.0.0",
+  "description": "A simple React typewriter component with customizable typing effects",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "dev": "webpack serve --config webpack/webpack.config.js --env env=dev",
+    "build:types": "tsc",
+    "build:js": "webpack --config webpack/webpack.config.js --env env=prod",
+    "build": "pnpm run build:types && pnpm run build:js",
+    "lint": "eslint . --ext .ts,.tsx",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "typewriter",
+    "text animation",
+    "rich text editor",
+    "component"
+  ],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.14.0",
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "mini-css-extract-plugin": "^2.9.4",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.2",
+    "webpack-merge": "^6.0.1"
+  },
+  "dependencies": {
+    "uuid": "^11.1.0"
+  }
+}
