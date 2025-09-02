@@ -1,28 +1,30 @@
-import React, { useEffect, useRef, useState } from "react";
-import { v4 as uuidV4 } from "uuid";
+import React from "react";
 import "../style/style.css";
+import { controllers } from "./controller/controllerSchema";
+import ControllerMapping from "./controller/ControllerMapping";
+import { getEditionSelectionRange } from "../utils/editor";
 
 const Typewriter = ({ onChange = (value: string) => {} }) => {
   const handleEdit = (e: InputEvent) => {
-    const selection = window.getSelection();
-    if (!selection || !selection.anchorNode) return;
-    let anchorNode = selection.anchorNode;
+    const { anchorNode } = getEditionSelectionRange();
+    if (!anchorNode) return;
+    let currentAnchorNode = anchorNode;
+
     // If the anchor is an element, try to get the first text node inside
-    if (anchorNode.nodeType === Node.ELEMENT_NODE && anchorNode.childNodes.length > 0) {
-      anchorNode = anchorNode.childNodes[0];
+    if (currentAnchorNode.nodeType === Node.ELEMENT_NODE && currentAnchorNode.childNodes.length > 0) {
+      currentAnchorNode = currentAnchorNode.childNodes[0];
     }
-    if (anchorNode.nodeType === Node.TEXT_NODE) {
-      const textContent = anchorNode.textContent || "";
-      const parent = anchorNode.parentNode as HTMLElement;
+    if (currentAnchorNode.nodeType === Node.TEXT_NODE) {
+      const textContent = currentAnchorNode.textContent || "";
+      const parent = currentAnchorNode.parentNode as HTMLElement;
 
       // Wrap in <p> if parent is not <p>
       if (parent && parent.tagName.toLowerCase() !== "p" && textContent) {
         const p = document.createElement("p");
-        p.setAttribute("data-id", uuidV4());
         p.style.padding = "0px";
         p.style.margin = "0px";
         p.textContent = textContent;
-        parent.replaceChild(p, anchorNode);
+        parent.replaceChild(p, currentAnchorNode);
 
         // Move caret to end
         const range = document.createRange();
@@ -38,7 +40,13 @@ const Typewriter = ({ onChange = (value: string) => {} }) => {
   return (
     <div className="react-typewriter-wrapper">
       <div className="react-typewriter-controllers-and-editor">
-        <div className="react-typewriter-controllers"></div>
+        <div className="react-typewriter-controllers">
+          {/* mapping controller buttons */}
+          {controllers?.map((controller, index) => {
+            if (!controller?.field_type) return;
+            return <ControllerMapping key={index} field_type={controller?.field_type} value={""} onChange={() => {}} />;
+          })}
+        </div>
         <div
           className="react-typewriter-editor"
           contentEditable
